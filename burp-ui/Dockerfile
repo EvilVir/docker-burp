@@ -2,16 +2,13 @@ FROM fedora:25
 MAINTAINER "Peter Schiffer" <pschiffe@redhat.com>
 
 RUN dnf -y --setopt=tsflags=nodocs install \
-        python-pip \
-        pyOpenSSL \
-        python-gevent \
-        python-gunicorn \
+        python3-pyOpenSSL \
+        python3-gevent \
+        python3-gunicorn \
     && dnf clean all
 
-RUN pip3 install envtpl \
-    && rm -rf ~/.cache/*
-
-RUN pip install "burp-ui[ldap_authentication]" \
+RUN pip3 install https://burpui.ziirish.me/builds/burp-ui.dev.tar.gz \
+    && pip3 install envtpl "burp-ui[ldap_authentication]" \
     && rm -rf ~/.cache/* \
     && mkdir -p /etc/burp /etc/burp.tpl
 
