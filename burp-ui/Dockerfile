@@ -7,8 +7,9 @@ RUN dnf -y --setopt=tsflags=nodocs install \
         python3-gunicorn \
     && dnf clean all
 
-RUN pip3 install https://burpui.ziirish.me/builds/burp-ui.dev.tar.gz \
-    && pip3 install envtpl "burp-ui[ldap_authentication]" \
+#RUN pip3 install "https://burpui.ziirish.me/builds/burp-ui.dev.tar.gz" \
+#    && pip3 install envtpl burp-ui "burp-ui[ldap_authentication]" \
+RUN pip3 install envtpl burp-ui "burp-ui[ldap_authentication]" \
     && rm -rf ~/.cache/* \
     && mkdir -p /etc/burp /etc/burp.tpl
 
