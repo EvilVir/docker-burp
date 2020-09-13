@@ -1,13 +1,9 @@
-FROM fedora:31
+FROM arm32v7/debian
 
-RUN dnf -y install \
-    burp-client \
-    gettext \
-    hostname \
-  && dnf clean all \
-  && rm -f /etc/burp/burp.conf \
-  && curl -fsSL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /usr/local/bin/wait-for-it.sh \
-  && chmod +x /usr/local/bin/wait-for-it.sh
+RUN apt-get update \
+	&& apt-get -y install burp gettext-base
+
+RUN rm -rf /etc/burp/*
 
 ENV BURP_SERVER=burp \
     BURP_SERVER_PORT=4971 \
@@ -15,8 +11,11 @@ ENV BURP_SERVER=burp \
 
 VOLUME [ "/etc/burp" ]
 
+COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 COPY burp.conf.tpl /etc/burp/burp.conf.tpl
 COPY docker-cmd.sh /docker-cmd.sh
+
+RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 ENTRYPOINT [ "/docker-cmd.sh" ]
 CMD [ "-a", "t" ]
